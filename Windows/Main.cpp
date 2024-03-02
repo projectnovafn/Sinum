@@ -4,6 +4,8 @@
 
 static void Main()
 {
+    Sleep(7500);
+
     Core::Init();
     Sinum::Init();
 }

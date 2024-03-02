@@ -9,7 +9,7 @@ bool Sinum::ProcessRequestHook(FCurlHttpRequest* Request)
 
     if (PathIndex != std::wstring::npos)
     {
-        auto Path = URL.substr(PathIndex + 4);
+        auto Path = URL.substr(PathIndex + 16);
         auto NewURL = Constants::API_URL + Path;
 
         Request->URL = NewURL.c_str();
