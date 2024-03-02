@@ -25,11 +25,6 @@ Sinum provides support for the following platforms:
     - Helping with [iOS](iOS) & [Android](Android)
     - Creating [Memcury](https://github.com/kem0x/Memcury)
     
-    
-# Commercial Licensing
-
-For commercial use of Sinum or any inquiries regarding licensing, please contact us at admin@novafn.org, [ender.0001](https://discord.com/users/748226254955741226/) or [ky1ro](https://discord.com/users/345278936256741377/).
-
 # License Disclosure
 
 **Portions of the materials used are trademarks and/or copyrighted works of Epic Games, Inc. All rights reserved by Epic. This material is not official and is not endorsed by Epic.**
