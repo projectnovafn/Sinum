@@ -20,11 +20,27 @@ bool Sinum::ProcessRequestHook(FCurlHttpRequest* Request)
 
 void Sinum::Init()
 {
-    _ProcessRequest = Memcury::Scanner::FindStringRef(Constants::ProcessRequest)
-        .ScanFor({ 0x48, 0x81, 0xEC }, false)
-        .ScanFor({ 0x40 }, false)
-        .GetAs<decltype(_ProcessRequest)>();
+    auto StringRef = Memcury::Scanner::FindStringRef(Constants::ProcessRequest_C2);
+    if (StringRef.IsValid()) {
+        _ProcessRequest = StringRef
+            .ScanFor({ 0x4C, 0x8B, 0xDC }, false)
+            .GetAs<decltype(_ProcessRequest)>();
 
-    *Memcury::Scanner::FindPointerRef(_ProcessRequest)
-        .GetAs<void**>() = ProcessRequestHook;
+        auto PointerRef = Memcury::Scanner::FindPointerRef(_ProcessRequest);
+        if (PointerRef.IsValid()) {
+            *PointerRef.GetAs<void**>() = ProcessRequestHook;
+            return;
+        }
+    }
+
+    StringRef = Memcury::Scanner::FindStringRef(Constants::ProcessRequest);
+    if (StringRef.IsValid()) {
+        _ProcessRequest = StringRef
+            .ScanFor({ 0x48, 0x81, 0xEC }, false)
+            .ScanFor({ 0x40 }, false)
+            .GetAs<decltype(_ProcessRequest)>();
+
+        *Memcury::Scanner::FindPointerRef(_ProcessRequest)
+            .GetAs<void**>() = ProcessRequestHook;
+    }
 }
