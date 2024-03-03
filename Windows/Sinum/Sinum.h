@@ -6,17 +6,24 @@
 class FCurlHttpRequest
 {
 private:
-	unsigned char Pad[0x58];
+	void** VTable;
 
 public:
 
-	FString URL;
+	FString GetURL()
+	{
+		FString Result;
+		return ((FString& (*)(FCurlHttpRequest*, FString&))(*VTable))(this, Result);
+	}
+
+	void SetURL(FString URL)
+	{
+		((void (*)(FCurlHttpRequest*, FString&))(VTable[10]))(this, URL);
+	}
 };
 
 namespace Sinum
 {
-	static bool IsPastUAC = false;
-
 	static bool (*_ProcessRequest)(FCurlHttpRequest*);
 	static bool ProcessRequestHook(FCurlHttpRequest* Request);
 

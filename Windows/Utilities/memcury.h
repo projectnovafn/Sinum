@@ -253,6 +253,9 @@ namespace Memcury
             INT3 = 0xCC,
             RETN_REL8 = 0xC2,
             RETN = 0xC3,
+            POP = 0x58,
+            MAXOP = 0x5F,
+            CMOVNO = 0x41,
             NONE = 0x00,
             PUSH = 0x40
         };
@@ -838,6 +841,8 @@ namespace Memcury
                 }
             }
 
+            MemcuryAssertM(add != 0, "FindPointerRef return nullptr");
+
             return Scanner(add);
         }
 
@@ -870,25 +875,6 @@ namespace Memcury
                         return ScanFor(opcodesToFind, forward, toSkip - 1);
                     }
 
-                    break;
-                }
-            }
-
-            return *this;
-        }
-
-        auto FindFunctionBoundary(bool forward = false) -> Scanner
-        {
-            const auto scanBytes = _address.GetAs<std::uint8_t*>();
-
-            for (auto i = (forward ? 1 : -1); forward ? (i < 2048) : (i > -2048); forward ? i++ : i--)
-            {
-                if ( // ASM::byteIsA(scanBytes[i], ASM::MNEMONIC::JMP_REL8) ||
-                    // ASM::byteIsA(scanBytes[i], ASM::MNEMONIC::JMP_REL32) ||
-                    // ASM::byteIsA(scanBytes[i], ASM::MNEMONIC::JMP_EAX) ||
-                    ASM::byteIsA(scanBytes[i], ASM::MNEMONIC::RETN_REL8) || ASM::byteIsA(scanBytes[i], ASM::MNEMONIC::RETN) || ASM::byteIsA(scanBytes[i], ASM::MNEMONIC::INT3))
-                {
-                    _address = (uintptr_t)&scanBytes[i + 1];
                     break;
                 }
             }

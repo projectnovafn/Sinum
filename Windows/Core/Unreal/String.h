@@ -46,10 +46,6 @@ public:
 		}
 	};
 
-	inline auto GetData()
-	{
-		return Data;
-	}
 
 	inline auto c_str()
 	{
