@@ -7,7 +7,7 @@ Sinum is used to redirect requests from a target URL, such as ol.epicgames.com, 
 Sinum provides support for the following platforms:
 
 - [Android](Android) through a custom .so file
-- [iOS](iOS) via dylib injection
+- [iOS](iOS) through dylib injection
 - [Windows](Windows) through DLL injection
 - [Xbox](Windows) through DLL injection
 
