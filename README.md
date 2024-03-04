@@ -24,6 +24,8 @@ Sinum provides support for the following platforms:
 - [Kemo](https://github.com/kem0x)
     - Helping with [iOS](iOS) & [Android](Android)
     - Creating [Memcury](https://github.com/kem0x/Memcury)
+- [Lupus](https://github.com/EZFNDEV)
+    - Adding Chapter 2 to [Windows](Windows)
     
 # License Disclosure
 
