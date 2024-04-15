@@ -3,4 +3,4 @@
 rm -rf build
 mkdir -p build
 
-arm-apple-darwin11-clang++ -dynamiclib -arch arm64 -o build/libSinum.dylib -framework Foundation
+arm-apple-darwin11-clang++ Main.m -dynamiclib -arch arm64 -o build/libSinum.dylib -framework Foundation -framework UIKit

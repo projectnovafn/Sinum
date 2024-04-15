@@ -3,4 +3,4 @@
 rm -rf build
 mkdir -p build
 
-clang++ -dynamiclib -arch arm64 -o build/libSinum.dylib -framework Foundation
+clang++ Main.m -dynamiclib -arch arm64 -o build/libSinum.dylib -framework Foundation

@@ -3,7 +3,8 @@
 #import <Foundation/Foundation.h>
 #import <objc/runtime.h>
 
-#define API_URL @"https://api.novafn.dev";
+#define API_URL @"https://api.novafn.dev"
+#define EPIC_GAMES_URL @"ol.epicgames.com"
 
 @interface CustomURLProtocol : NSURLProtocol
 @end
@@ -11,60 +12,55 @@
 @implementation CustomURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request 
-{
-    return !([NSURLProtocol propertyForKey:@"RequestHandled" inRequest:request);
+{  
+    NSString *absoluteURLString = [[request URL] absoluteString];
+    if ([absoluteURLString containsString:EPIC_GAMES_URL] && ![absoluteURLString containsString:@"/CloudDir/"]) {
+        if ([NSURLProtocol propertyForKey:@"Handled" inRequest:request]) {
+            return NO;
+        }
+        return YES;
+    }
+    return NO;
 }
 
-+ (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request 
++ (NSURLRequest*)canonicalRequestForRequest:(NSURLRequest*)request
 {
     return request;
 }
 
-- (void)startLoading 
+- (void)startLoading
 {
-    NSMutableURLRequest* ModifiedRequest = [[self request] mutableCopy];
-    NSString* OriginalPath = [ModifiedRequest.URL path];
-    NSString* OriginalQuery = [ModifiedRequest.URL query];
-    
-    NSString* NewBaseURLString = API_URL;
-    NSURLComponents* Components = [NSURLComponents componentsWithString:newBaseURLString];
-    
-    Components.path = OriginalPath;
-    if (OriginalQuery)
+    NSMutableURLRequest* modifiedRequest = [[self request] mutableCopy];
+
+    NSString* originalPath = [modifiedRequest.URL path];
+    NSString* originalQuery = [modifiedRequest.URL query];
+
+    NSString* newBaseURLString = API_URL;
+    NSURLComponents* components = [NSURLComponents componentsWithString:newBaseURLString];
+
+    components.path = originalPath;
+    if (originalQuery)
     {
-        Components.query = OriginalQuery;
+        components.query = originalQuery;
     }
 
-    [modifiedRequest setURL:Components.URL];
-    [NSURLProtocol setProperty:@YES forKey:@"RequestHandled" inRequest:modifiedRequest];
-    [[self client] URLProtocol:self wasRedirectedToRequest:modifiedRequest redirectResponse:nil];
+    [modifiedRequest setURL:components.URL];
+    [NSURLProtocol setProperty:@YES forKey:@"Handled" inRequest:modifiedRequest];
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    [[self client] URLProtocol:self
+        wasRedirectedToRequest:modifiedRequest
+              redirectResponse:nil];
+#pragma clang diagnostic pop
 }
 
-
-
-- (void)stopLoading 
+- (void)stopLoading
 {
 }
 @end
 
-@interface CustomSessionConfiguration : NSURLSessionConfiguration
-@end
-
-@implementation CustomSessionConfiguration
-
-+ (CustomSessionConfiguration *)defaultSessionConfiguration 
-{
-    CustomSessionConfiguration *configuration = [super defaultSessionConfiguration];
-    NSMutableArray *defaultProtocols = [configuration.protocolClasses mutableCopy];
-    [defaultProtocols insertObject:[CustomURLProtocol class] atIndex:0];
-    configuration.protocolClasses = [defaultProtocols copy];
-    return configuration;
-}
-
-@end
-
-__attribute__((constructor))
-void entry()
+__attribute__((constructor)) void entry()
 {
     [NSURLProtocol registerClass:[CustomURLProtocol class]];
 }
