@@ -39,6 +39,8 @@
 #define XORSTR_FORCEINLINE __attribute__((always_inline)) inline
 #endif
 
+#define JM_XORSTR_DISABLE_AVX_INTRINSICS
+
 namespace jm {
 
     namespace detail {

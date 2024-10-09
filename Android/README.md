@@ -13,7 +13,7 @@ Sinum Android redirects requests via hooking **curl_easy_setopt** and modifying 
 
 1. Locate the NDK path and the `ndk-build` file.
 2. Copy the full path to it.
-2. `<ndk-build> NDK_PROJECT_PATH=./ NDK_APPLICATION_MK=Application.mk APP_BUILD_SCRIPT=Android.mk`
+2. `<ndk-build> NDK_PROJECT_PATH=./ NDK_APPLICATION_MK=Application.mk APP_BUILD_SCRIPT=Android.mk TARGET_ABI=arm64-v8a`
 
 ### Packaging steps
 
