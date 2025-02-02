@@ -852,11 +852,11 @@ namespace Memcury
             return *this;
         }
 
-        auto ScanFor(std::vector<uint8_t> opcodesToFind, bool forward = true, int toSkip = 0) -> Scanner
+        auto ScanFor(std::vector<uint8_t> opcodesToFind, bool forward = true, int toSkip = 0, int Limit = 2048) -> Scanner
         {
             const auto scanBytes = _address.GetAs<std::uint8_t*>();
 
-            for (auto i = (forward ? 1 : -1); forward ? (i < 2048) : (i > -2048); forward ? i++ : i--)
+            for (auto i = (forward ? 1 : -1); forward ? (i < Limit) : (i > -Limit); forward ? i++ : i--)
             {
                 bool found = true;
 
