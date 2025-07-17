@@ -751,7 +751,7 @@ namespace Memcury
         }
 
         // Supports wide and normal strings both std and pointers
-        template <typename T = const wchar_t*>
+        template <typename T = const wchar_t*, bool WarnIfNotFound = true>
         static auto FindStringRef(T string) -> Scanner
         {
             PE::Address add{ nullptr };
@@ -818,7 +818,8 @@ namespace Memcury
                 }
             }
 
-            MemcuryAssertM(add != 0, "FindStringRef return nullptr");
+            if constexpr (WarnIfNotFound)
+                MemcuryAssertM(add != 0, "FindStringRef return nullptr");
 
             return Scanner(add);
         }
@@ -852,11 +853,14 @@ namespace Memcury
             return *this;
         }
 
-        auto ScanFor(std::vector<uint8_t> opcodesToFind, bool forward = true, int toSkip = 0) -> Scanner
+        auto ScanFor(std::vector<uint8_t> opcodesToFind, bool forward = true, int toSkip = 0, int lim = 2048, bool* outFound = nullptr) -> Scanner
         {
             const auto scanBytes = _address.GetAs<std::uint8_t*>();
 
-            for (auto i = (forward ? 1 : -1); forward ? (i < 2048) : (i > -2048); forward ? i++ : i--)
+            if (outFound)
+                *outFound = false;
+
+            for (auto i = (forward ? 1 : -1); forward ? (i < lim) : (i > -lim); forward ? i++ : i--)
             {
                 bool found = true;
 
@@ -874,6 +878,9 @@ namespace Memcury
                     {
                         return ScanFor(opcodesToFind, forward, toSkip - 1);
                     }
+
+                    if (outFound)
+                        *outFound = true;
 
                     break;
                 }
