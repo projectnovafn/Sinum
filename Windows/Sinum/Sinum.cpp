@@ -20,21 +20,43 @@ bool Sinum::ProcessRequestHook(FCurlHttpRequest* Request)
 
 void Sinum::Init()
 {
-    auto StringRef = Memcury::Scanner::FindStringRef(Constants::ProcessRequest);
+    auto StringRef = Memcury::Scanner::FindStringRef<const wchar_t*, false>(Constants::ProcessRequest_C2);
     if (StringRef.IsValid())
     {
+        bool bFound = false;
         _ProcessRequest = StringRef
-            .ScanFor({ 0x48, 0x81, 0xEC }, false)
-            .ScanFor({ 0x40 }, false)
+            .ScanFor({ 0x4C, 0x8B, 0xDC }, false, 0, 500, &bFound)
             .GetAs<decltype(_ProcessRequest)>();
+
+        if (!bFound)
+        {
+            _ProcessRequest = StringRef
+                .ScanFor({ 0x40, 0x53, 0x55 }, false, 0, 500, &bFound) // checked on: 12.41
+                .GetAs<decltype(_ProcessRequest)>();
+
+            if (!bFound)
+            {
+                _ProcessRequest = StringRef
+                    .ScanFor({ 0x48, 0x8B, 0xC4 }, false, 0, 500, &bFound) // checked on: 16.50, 19.10
+                    .GetAs<decltype(_ProcessRequest)>();
+            }
+        }
     }
     else
     {
-        _ProcessRequest = Memcury::Scanner::FindStringRef(Constants::ProcessRequest_C2)
-            .ScanFor({ 0x4C, 0x8B, 0xDC }, false)
+        _ProcessRequest = Memcury::Scanner::FindStringRef(Constants::ProcessRequest)
+            .ScanFor({ 0x48, 0x81, 0xEC }, false, 1000)
+            .ScanFor({ 0x40 }, false)
             .GetAs<decltype(_ProcessRequest)>();
     }
 
-    *Memcury::Scanner::FindPointerRef(_ProcessRequest)
-        .GetAs<void**>() = ProcessRequestHook;
+    auto ProcessRequestRef = Memcury::Scanner::FindPointerRef(_ProcessRequest);
+    
+    DWORD dwProtection;
+    VirtualProtect(ProcessRequestRef.GetAs<PVOID>(), 8, PAGE_EXECUTE_READWRITE, &dwProtection);
+
+    *ProcessRequestRef.GetAs<void**>() = ProcessRequestHook;
+
+    DWORD dwTemp;
+    VirtualProtect(ProcessRequestRef.GetAs<PVOID>(), 8, dwProtection, &dwTemp);
 }
