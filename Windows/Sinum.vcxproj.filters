@@ -42,6 +42,12 @@
     <ClInclude Include="Utilities\memcury.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Core\EOS.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Unreal\CurlHttp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -51,6 +57,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Core\Core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\EOS.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Unreal\CurlHttp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

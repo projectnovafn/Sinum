@@ -9,8 +9,10 @@ void Core::Init()
 		Sleep(250);
 	}
 
+	Sleep(2500);
+
 	FMemory::_Realloc = Memcury::Scanner::FindPattern("48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 48 8B F1 41 8B D8 48 8B 0D ? ? ? ? 48")
-		.GetAs<decltype(FMemory::_Realloc)>(); // Checked on: 1.8, 12.41, 15.50, 19.10
+		.GetAs<decltype(FMemory::_Realloc)>(); // checked on: 1.8, 12.41, 15.50, 19.10, 23.50
 
 	auto RequestExitRef = Memcury::Scanner::FindStringRef<const wchar_t*, false>(L"FPlatformMisc::RequestExitWithStatus(%i, %i)");
 

@@ -1,21 +1,13 @@
 // Copyright (c) 2025 Project Nova LLC
 
+#include "../framework.h"
+#include "../Core/Unreal/CurlHttp.h"
+
 #include "Sinum.h"
 
 bool Sinum::ProcessRequestHook(FCurlHttpRequest* Request)
 {
-    std::wstring URL(Request->GetURL().c_str());
-    size_t PathIndex = URL.find(L"ol.epicgames.com");
-
-    if (PathIndex != std::wstring::npos)
-    {
-        auto Path = URL.substr(PathIndex + 16);
-        auto NewURL = Constants::API_URL + Path;
-
-        Request->SetURL(NewURL.c_str());
-    }
-
-    return _ProcessRequest(Request);
+    return _ProcessRequest(Request->RedirectRequest());
 }
 
 void Sinum::Init()
@@ -25,19 +17,19 @@ void Sinum::Init()
     {
         bool bFound = false;
         _ProcessRequest = StringRef
-            .ScanFor({ 0x4C, 0x8B, 0xDC }, false, 0, 500, &bFound)
+            .ScanFor({ 0x4C, 0x8B, 0xDC }, false, 0, 200, &bFound)
             .GetAs<decltype(_ProcessRequest)>();
 
         if (!bFound)
         {
             _ProcessRequest = StringRef
-                .ScanFor({ 0x40, 0x53, 0x55 }, false, 0, 500, &bFound) // checked on: 12.41
+                .ScanFor({ 0x40, 0x53, 0x55 }, false, 0, 200, &bFound) // checked on: 12.41
                 .GetAs<decltype(_ProcessRequest)>();
 
             if (!bFound)
             {
                 _ProcessRequest = StringRef
-                    .ScanFor({ 0x48, 0x8B, 0xC4 }, false, 0, 500, &bFound) // checked on: 16.50, 19.10
+                    .ScanFor({ 0x48, 0x8B, 0xC4 }, false, 0, 200, &bFound) // checked on: 16.50, 19.10, 23.50
                     .GetAs<decltype(_ProcessRequest)>();
             }
         }
