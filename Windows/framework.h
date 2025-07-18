@@ -7,4 +7,5 @@
 #include "Utilities\Windows.h"
 
 #include "Core\Core.h"
+#include "Core\EOS.h"
 #include "Sinum\Sinum.h"

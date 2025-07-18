@@ -1,10 +1,8 @@
-// Copyright (c) 2025 Project Nova LLC
-
 #pragma once
 
 class FCurlHttpRequest;
 
-namespace Sinum
+namespace EOS
 {
 	static bool (*_ProcessRequest)(FCurlHttpRequest*);
 	static bool ProcessRequestHook(FCurlHttpRequest* Request);

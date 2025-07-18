@@ -11,6 +11,7 @@ static void Main()
 #endif
 
     Core::Init();
+    EOS::Init();
     Sinum::Init();
 }
 
