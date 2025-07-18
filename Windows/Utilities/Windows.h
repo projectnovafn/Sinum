@@ -1,4 +1,4 @@
-// Copyright (c) 2024 Project Nova LLC
+// Copyright (c) 2025 Project Nova LLC
 
 #pragma once
 #include "../framework.h"

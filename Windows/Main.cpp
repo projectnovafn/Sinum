@@ -1,16 +1,9 @@
-// Copyright (c) 2024 Project Nova LLC
+// Copyright (c) 2025 Project Nova LLC
 
 #include "framework.h"
 
 static void Main()
 {
-    while (!Memcury::Scanner::FindStringRef<const wchar_t*, false>(L"Fortnite").IsValid()) // Wait for the game to be unpacked
-    {
-        Sleep(250);
-    }
-
-    Sleep(7500);
-
 #if 0
     AllocConsole();
     FILE* fptr;
